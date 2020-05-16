@@ -1,0 +1,32 @@
+version: '{branch}-{build}'
+
+image: Visual Studio 2013
+
+# called before clone
+# Note that environment variables don't seem to transfer correctly from cmd to ps when
+# they contain spaces
+init:
+  - echo %APPVEYOR_BUILD_WORKER_IMAGE%
+  - echo %APPVEYOR_BUILD_WORKER_IMAGE%
+  - ps: $(Get-ChildItem env:)
+  - ps: $CommitAndPush = $True
+
+build_script:
+  - echo msbuild /nologo /verbosity:minimal src.sln
+
+on_success:
+  - ps: |
+      if ($CommitAndPush) {
+        $SaveErrorActionPreference = $ErrorActionPreference
+        $ErrorActionPreference = "Stop"
+        Write-Output "This is the $env:CommitBranch branch"
+        Set-Location \
+        git clone -q --branch=master https://github.com/scharlton2/HelloWorld.git
+        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+        Set-Location .\HelloWorld
+        git checkout -qf master
+        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+        # display environment variables
+        Get-ChildItem env:
+        $SaveErrorActionPreference = $ErrorActionPreference
+      }
