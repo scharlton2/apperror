@@ -22,10 +22,10 @@ on_success:
         Write-Output "This is the $env:CommitBranch branch"
         Set-Location \
         git clone -q --branch=master https://github.com/scharlton2/HelloWorld.git
-        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
         Set-Location .\HelloWorld
         git checkout -qf master
-        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
         # display environment variables
         Get-ChildItem env:
         $SaveErrorActionPreference = $ErrorActionPreference
