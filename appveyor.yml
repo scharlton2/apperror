@@ -21,7 +21,7 @@ after_build:
         $ErrorActionPreference = "Stop"
         ## The next line prompts for login credentials and causes appveyor to hang
         ## git clone -q --branch=master https://github.com/scharlton2/XHelloWorld.git
-        whoami
+        whoami /aa
         if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
         # display environment variables
         Get-ChildItem env:
