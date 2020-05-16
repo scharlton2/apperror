@@ -7,26 +7,34 @@ image: Visual Studio 2013
 # they contain spaces
 init:
   - echo %APPVEYOR_BUILD_WORKER_IMAGE%
-  - echo %APPVEYOR_BUILD_WORKER_IMAGE%
   - ps: $(Get-ChildItem env:)
   - ps: $CommitAndPush = $True
 
 build_script:
   - echo msbuild /nologo /verbosity:minimal src.sln
 
-on_success:
+after_build:
   - ps: |
       if ($CommitAndPush) {
-        ##$SaveErrorActionPreference = $ErrorActionPreference
-        ##$ErrorActionPreference = "Stop"
-        Write-Output "This is the $env:CommitBranch branch"
+        Write-Output "This is the $env:APPVEYOR_REPO_BRANCH branch"
+        $SaveErrorActionPreference = $ErrorActionPreference
+        $ErrorActionPreference = "Stop"
         Set-Location \
         git clone -q --branch=master https://github.com/scharlton2/HelloWorld.git
         if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
-        Set-Location .\XHelloWorld
+        Set-Location .\HelloWorld
         git checkout -qf master
         if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
         # display environment variables
         Get-ChildItem env:
-        ##$SaveErrorActionPreference = $ErrorActionPreference
+        $SaveErrorActionPreference = $ErrorActionPreference
       }
+
+on_success:
+  - echo "on_success"
+
+on_failure:
+  - echo "on_failure"
+
+on_finish:
+  - echo "on_finish"
