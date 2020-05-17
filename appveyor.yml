@@ -11,11 +11,11 @@ image: Visual Studio 2013
 # they contain spaces
 init:
   - echo %APPVEYOR_BUILD_WORKER_IMAGE%
-  - ps: $(Get-ChildItem env:)
+  ## THIS SHOWS TOKEN IN PLAINTEXT - ps: $(Get-ChildItem env:)
   - ps: $CommitAndPush = $True
 
 build_script:
-  - date
+  - ps: Get-Date
 
 after_build:
   - ps: |
@@ -38,7 +38,7 @@ after_build:
         git config --global core.safecrlf false
         if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 
-        date > date.txt
+        Get-Date > date.txt
 
         git add date.txt
         git commit -m"build by appveyor"
