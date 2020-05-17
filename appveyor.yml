@@ -1,58 +1,14 @@
-version: '{branch}-{build}'
-
 environment:
-  scharlton2_access_token:
-    secure: wo6FZZDGuqjqy+98ysr9fN0h0Jutz2GuXksj7H/2jf3YwchPZFtj9ieDRk2V5l/g
+  access_token:
+    secure: XFfVvroKdHjCHRpjPN1VWDMJ0U0gt6ciKzEPK2OYVNjoYMrc9yE97UwtNzi+8vJJ
 
-image: Visual Studio 2013
-
-# called before clone
-# Note that environment variables don't seem to transfer correctly from cmd to ps when
-# they contain spaces
-init:
-  - echo %APPVEYOR_BUILD_WORKER_IMAGE%
-  ## THIS SHOWS TOKEN IN PLAINTEXT - ps: $(Get-ChildItem env:)
-  - ps: $CommitAndPush = $True
-
-build_script:
-  - ps: Get-Date
-
-after_build:
-  - ps: |
-      if ($CommitAndPush) {
-        $access_token = $env:scharlton2_access_token
-
-        git clone --branch=master https://github.com/scharlton2/HelloWorld.git
-        Set-Location .\HelloWorld -ErrorAction Stop
-
-        if ($True) {
-          # create branch when remote is not "i-RIC/prepost-gui"
-          git checkout -b __$env:APPVEYOR_JOB_ID
-          if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
-        }
-
-        # configure git for commit and push
-        Add-Content "$HOME\.git-credentials" "https://$($access_token):x-oauth-basic@github.com`n" -ErrorAction Stop
-        git config --global user.email "iric.appveyor@gmail.com"
-        git config --global user.name "iric.appveyor"
-        git config --global core.safecrlf false
-        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
-
-        Get-Date > date.txt
-
-        git add date.txt
-        git commit -m"build by appveyor"
-        git push --set-upstream origin __$env:APPVEYOR_JOB_ID
-
-        # display environment variables
-        Get-ChildItem env: -ErrorAction Stop
-      }
+build:
+  - ps: Get-Date >> README.md
 
 on_success:
-  - echo "on_success"
-
-on_failure:
-  - echo "on_failure"
-
-on_finish:
-  - echo "on_finish"
+  - git config --global credential.helper store
+  - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:access_token):x-oauth-basic@github.com`n" -NoNewline
+  - git config --global user.email "charlton@usgs.gov"
+  - git config --global user.name "Scott Charlton"
+  - git commit -m"Testing"
+  - git push
