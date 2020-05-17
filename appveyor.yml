@@ -2,10 +2,8 @@ environment:
   access_token:
     secure: XFfVvroKdHjCHRpjPN1VWDMJ0U0gt6ciKzEPK2OYVNjoYMrc9yE97UwtNzi+8vJJ
 
-build:
-  - ps: Get-Date >> README.md
-
 on_success:
+  - ps: Get-Date >> README.md
   - git config --global credential.helper store
   - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:access_token):x-oauth-basic@github.com`n" -NoNewline
   - git config --global user.email "charlton@usgs.gov"
