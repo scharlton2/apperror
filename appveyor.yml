@@ -2,6 +2,11 @@ environment:
   access_token:
     secure: XFfVvroKdHjCHRpjPN1VWDMJ0U0gt6ciKzEPK2OYVNjoYMrc9yE97UwtNzi+8vJJ
 
+
+branches:
+  only:
+    - master
+
 build_script:
   - ps: Get-Date >> README.md
 
@@ -11,6 +16,7 @@ on_success:
   - git config --global user.email "charlton@usgs.gov"
   - git config --global user.name "Scott Charlton"
   - git checkout master
+  - git checkout -b __$env:APPVEYOR_JOB_ID
   - git remote -v
   - git commit -am"Testing"
-  - git push
+  - git push --set-upstream origin __$env:APPVEYOR_JOB_ID
