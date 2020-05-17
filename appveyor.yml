@@ -1,6 +1,9 @@
 environment:
   access_token:
     secure: XFfVvroKdHjCHRpjPN1VWDMJ0U0gt6ciKzEPK2OYVNjoYMrc9yE97UwtNzi+8vJJ
+  iric_appveyor_access_token:
+    secure: 55pEdH+k+aocMad2YNOe4QPufbra93mZ2/5mmVRQ2zyjl5/56QsroQdJinyofpo0
+
 
 
 branches:
@@ -12,7 +15,8 @@ build_script:
 
 on_success:
   - git config --global credential.helper store
-  - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:access_token):x-oauth-basic@github.com`n" -NoNewline
+  - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:iric_appveyor_access_token):x-oauth-basic@github.com`n" -NoNewline
+  # Note user.email/user.name doesn't have to match access_token
   - git config --global user.email "iric.appveyor@gmail.com"
   - git config --global user.name "iric.appveyor"
   - git checkout master
