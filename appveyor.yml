@@ -2,7 +2,7 @@ version: '{branch}-{build}'
 
 environment:
   scharlton2_access_token:
-    secure: XFfVvroKdHjCHRpjPN1VWDMJ0U0gt6ciKzEPK2OYVNjoYMrc9yE97UwtNzi+8vJJ
+    secure: wo6FZZDGuqjqy+98ysr9fN0h0Jutz2GuXksj7H/2jf3YwchPZFtj9ieDRk2V5l/g
 
 image: Visual Studio 2013
 
