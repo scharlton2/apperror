@@ -18,8 +18,9 @@ build_script:
   - ps: Get-Date >> README.md
 
 on_success:
+  - ps: $access_token = $env:scharlton2_access_token
   - git config --global credential.helper store
-  - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:scharlton2_access_token):x-oauth-basic@github.com`n" -NoNewline
+  - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($access_token):x-oauth-basic@github.com`n" -NoNewline
   # Note user.email/user.name doesn't have to match access_token
   # if user is not yet a contributer error:
   #   https://ci.appveyor.com/project/scharlton2/apperror/builds/32937996
