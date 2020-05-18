@@ -30,5 +30,5 @@ on_success:
         git checkout -qb $env:APPVEYOR_JOB_ID
         git remote -v
         git commit -am"built by iric.appveyor"
-        git push --set-upstream origin $env:APPVEYOR_JOB_ID
+        git push -q --set-upstream origin $env:APPVEYOR_JOB_ID
       }
