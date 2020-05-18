@@ -8,8 +8,6 @@ environment:
   scharlton2_access_token:
     secure: Kt5VLMSJeqiQyx3Ox3sphU62h9OlWJeiOi7da6DSCuSjv3sp7Ab2LB4m717mCtN2
 
-
-
 branches:
   only:
     - master
@@ -18,16 +16,19 @@ build_script:
   - ps: Get-Date >> README.md
 
 on_success:
-  - ps: $access_token = $env:scharlton2_access_token
-  - git config --global credential.helper store
-  - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($access_token):x-oauth-basic@github.com`n" -NoNewline
-  # Note user.email/user.name doesn't have to match access_token
-  # if user is not yet a contributer error:
-  #   https://ci.appveyor.com/project/scharlton2/apperror/builds/32937996
-  - git config --global user.email "iric.appveyor@gmail.com"
-  - git config --global user.name "iric.appveyor"
-  - git checkout master
-  - git checkout -b %APPVEYOR_JOB_ID%
-  - git remote -v
-  - git commit -am"Testing"
-  - git push --set-upstream origin %APPVEYOR_JOB_ID%
+  - ps: |
+      if ($True) {
+        $access_token = $env:scharlton2_access_token
+        git config --global credential.helper store
+        Add-Content -Path "$HOME\.git-credentials" -Value "https://$($access_token):x-oauth-basic@github.com`n" -NoNewline -ErrorAction Stop
+        # Note user.email/user.name doesn't have to match access_token
+        # if user is not yet a contributer error:
+        #   https://ci.appveyor.com/project/scharlton2/apperror/builds/32937996
+        git config --global user.email "iric.appveyor@gmail.com"
+        git config --global user.name "iric.appveyor"
+        git checkout master
+        git checkout -b %APPVEYOR_JOB_ID%
+        git remote -v
+        git commit -am"built by iric.appveyor"
+        git push --set-upstream origin %APPVEYOR_JOB_ID%
+      }
