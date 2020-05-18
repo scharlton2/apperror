@@ -27,8 +27,8 @@ on_success:
         git config --global user.email "iric.appveyor@gmail.com"
         git config --global user.name "iric.appveyor"
         git checkout master
-        git checkout -b %APPVEYOR_JOB_ID%
+        git checkout -b $env:APPVEYOR_JOB_ID
         git remote -v
         git commit -am"built by iric.appveyor"
-        git push --set-upstream origin %APPVEYOR_JOB_ID%
+        git push --set-upstream origin $env:APPVEYOR_JOB_ID
       }
