@@ -17,6 +17,8 @@ on_success:
   - git config --global credential.helper store
   - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:iric_appveyor_access_token):x-oauth-basic@github.com`n" -NoNewline
   # Note user.email/user.name doesn't have to match access_token
+  # if user is not yet a contributer error:
+  #   https://ci.appveyor.com/project/scharlton2/apperror/builds/32937996
   - git config --global user.email "iric.appveyor@gmail.com"
   - git config --global user.name "iric.appveyor"
   - git checkout master
