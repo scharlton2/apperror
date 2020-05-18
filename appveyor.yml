@@ -3,7 +3,8 @@ environment:
     secure: XFfVvroKdHjCHRpjPN1VWDMJ0U0gt6ciKzEPK2OYVNjoYMrc9yE97UwtNzi+8vJJ
   iric_appveyor_access_token:
     secure: 55pEdH+k+aocMad2YNOe4QPufbra93mZ2/5mmVRQ2zyjl5/56QsroQdJinyofpo0
-
+  iric_access_token:
+    secure: ee8J3ZdtlbFttFmkcumsXr1/FKYOkf/vkN2ZC6lkymz3uOVTs23CXfQS4uMi/zVt
 
 
 branches:
@@ -15,7 +16,7 @@ build_script:
 
 on_success:
   - git config --global credential.helper store
-  - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:iric_appveyor_access_token):x-oauth-basic@github.com`n" -NoNewline
+  - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:iric_access_token):x-oauth-basic@github.com`n" -NoNewline
   # Note user.email/user.name doesn't have to match access_token
   # if user is not yet a contributer error:
   #   https://ci.appveyor.com/project/scharlton2/apperror/builds/32937996
